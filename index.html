@@ -1,41 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Document encoding and responsive viewport: important for correct rendering -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Page title shown in browser tab -->
   <title>Personality Quiz</title>
+
+  <!-- Favicon: small icon shown in browser tab. Path is relative to site root in this file. -->
   <link rel="icon" type="image/x-icon" href="/img/ideas.png" />
+
+  <!-- Bootstrap CSS (utility + layout + components).
+       - Using CDN here for quick prototyping.
+       - integrity & crossorigin are optional security attributes for the CDN file.
+       Script.js will rely on many Bootstrap utility classes used below (like .container, .row, .col-*).
+  -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
     rel="stylesheet"
     integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
     crossorigin="anonymous"
   />
+
+  <!-- Local stylesheet for any custom styles. Not required by script.js but may affect layout/visibility -->
   <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
+  <!--
+    Page heading and instructions
+    IDs:
+      - #quiz-title : can be used by script.js to reference/update the main title
+      - #quiz-instructions : can be used to update or hide/show instructions
+  -->
   <h1 class="text-center mt-4" id="quiz-title">WHAT KIND OF STUDENT ARE YOU</h1>
-  <p class="text-center text-muted" id="quiz-instructions">Answer each question below, then press “Show Results.”</p>
+  <p class="text-center text-muted" id="quiz-instructions">
+    Answer each question below, then press “Show Results.”
+  </p>
 
-  <!-- Wrap ALL question blocks so #quiz-questions button matches everything -->
+  <!--
+    IMPORTANT WRAPPER: #quiz-questions
+    - This container groups every question section together.
+    - Useful if script.js wants to iterate all questions or attach event delegation to a parent.
+    - Example selectors script.js might use:
+        document.getElementById('quiz-questions')
+        document.querySelectorAll('#quiz-questions .question-block')
+  -->
   <div id="quiz-questions">
-    <!-- Q1 -->
+
+    <!--
+      QUESTION 1
+      - This section represents a single question block.
+      - ID: #question-1 — can be used to target or validate that question was answered.
+      - .question-block class added to all question sections to allow bulk selection:
+          document.querySelectorAll('.question-block')
+    -->
     <section class="container d-flex justify-content-center question-block" id="question-1">
+      <!-- Card wrapper for visual grouping -->
       <div class="card my-4 p-4" style="width: 75%;">
+        <!-- Question text -->
         <h4 class="mb-3">WHERE DO YOU SIT IN CLASS?</h4>
+
+        <!--
+          Answer grid:
+          - .row and .col-* are Bootstrap layout helpers.
+          - Each answer is a <button> so script.js can add click listeners and toggle visual state.
+        -->
         <div class="row g-2">
+
+          <!-- ANSWER BUTTONS:
+               - Shared class: .answer-btn  => script.js should select all buttons by this class:
+                   document.querySelectorAll('.answer-btn')
+               - data-question attribute: which question this answer belongs to (string: "1", "2", ...)
+               - data-answer attribute: the option value (A, B, C, D)
+               - Use dataset in JS: button.dataset.question and button.dataset.answer
+               - Buttons use Bootstrap .btn and .btn-outline-primary to show unselected state;
+                 script.js can toggle classes (e.g., swap to .btn-primary) to mark selection.
+          -->
           <div class="col-6">
             <button class="btn btn-outline-primary w-100 answer-btn"
                     data-question="1" data-answer="A">Back Row</button>
           </div>
+
           <div class="col-6">
             <button class="btn btn-outline-primary w-100 answer-btn"
                     data-question="1" data-answer="B">With My Teammates</button>
           </div>
+
           <div class="col-6">
             <button class="btn btn-outline-primary w-100 answer-btn"
                     data-question="1" data-answer="C">Near the Cheer Team</button>
           </div>
+
           <div class="col-6">
             <button class="btn btn-outline-primary w-100 answer-btn"
                     data-question="1" data-answer="D">Front Row</button>
@@ -44,7 +100,11 @@
       </div>
     </section>
 
-    <!-- Q2 -->
+    <!--
+      QUESTION 2
+      - Same structure as Q1. ID = #question-2.
+      - Keep consistent data attributes for script.js to aggregate answers.
+    -->
     <section class="container d-flex justify-content-center question-block" id="question-2">
       <div class="card my-4 p-4" style="width: 75%;">
         <h4 class="mb-3">WHAT DO YOU DO RIGHT AFTER CLASS?</h4>
@@ -69,7 +129,10 @@
       </div>
     </section>
 
-    <!-- Q3 -->
+    <!--
+      QUESTION 3
+      - ID = #question-3
+    -->
     <section class="container d-flex justify-content-center question-block" id="question-3">
       <div class="card my-4 p-4" style="width: 75%;">
         <h4 class="mb-3">WHAT’S YOUR GO-TO WEEKEND PLAN?</h4>
@@ -94,7 +157,10 @@
       </div>
     </section>
 
-    <!-- Q4 -->
+    <!--
+      QUESTION 4
+      - ID = #question-4
+    -->
     <section class="container d-flex justify-content-center question-block" id="question-4">
       <div class="card my-4 p-4" style="width: 75%;">
         <h4 class="mb-3">WHAT BEST DESCRIBES YOUR STYLE?</h4>
@@ -119,7 +185,11 @@
       </div>
     </section>
 
-    <!-- Q5 -->
+    <!--
+      QUESTION 5
+      - ID = #question-5
+      - After this there are no more questions in this markup (total = 5).
+    -->
     <section class="container d-flex justify-content-center question-block" id="question-5">
       <div class="card my-4 p-4" style="width: 75%;">
         <h4 class="mb-3">HOW DO YOU PREP FOR AN EXAM THE NIGHT BEFORE?</h4>
@@ -145,12 +215,23 @@
     </section>
   </div><!-- /#quiz-questions -->
 
-  <!-- Show Results -->
+  <!--
+    SHOW RESULTS BUTTON
+    - ID: #show-result
+    - script.js should add a click listener to this button to calculate and display the quiz outcome.
+    - Example: document.getElementById('show-result').addEventListener('click', showResults)
+  -->
   <div class="container d-flex justify-content-center">
     <button id="show-result" class="btn btn-success my-4">Show Results</button>
   </div>
 
-  <!-- Result -->
+  <!--
+    RESULT CONTAINER
+    - #result-container: The whole result card. Initially hidden via Bootstrap utility class "d-none".
+        - script.js should remove the "d-none" class to reveal results (or toggle a class).
+    - #result-text: The paragraph where script.js should insert the human-readable result text.
+    - Keep this separate from the question DOM so it is easy to overwrite/update.
+  -->
   <div class="container d-flex justify-content-center">
     <div id="result-container" class="card p-4 mb-4 d-none" style="width: 75%;">
       <h3>Your Result:</h3>
@@ -158,9 +239,25 @@
     </div>
   </div>
 
-  <!-- Optional debug line to show stored answers while clicking -->
+  <!--
+    DEBUG OUTPUT
+    - #debug-output: optional area where script.js can print current stored answers / state while interacting.
+    - Helpful for development: update innerText with JSON.stringify(answers) to quickly validate logic.
+  -->
   <p id="debug-output" class="text-center text-muted"></p>
 
+  <!--
+    Main script inclusion.
+    - script.js will run after this markup is parsed (script tag at end of body).
+    - Ensure the file path ./js/script.js is correct relative to this HTML file.
+    - Typical responsibilities of script.js given this markup:
+        * Attach click handlers to all .answer-btn elements
+        * Read dataset.question and dataset.answer to store user's choices
+        * Visually mark selected answer (toggle classes)
+        * Validate that all required questions have an answer before calculating result
+        * Compute and display result in #result-text and un-hide #result-container
+        * Optionally update #debug-output with internal state for development
+  -->
   <script src="./js/script.js"></script>
 </body>
-</html>
+</html></div>
